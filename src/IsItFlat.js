@@ -5,7 +5,7 @@ class IsItFlat extends Component {
 
   render() {
     return (<div >
-      Below is a moving time series where you change the values that each respective line produces every 10 seconds by clicking their respective button.
+      Below is a graph that demonstrates how many cases we are dealing with currently in the United States. Other features to come!
       <MovingTimeSeries/>
     </div>)
   }

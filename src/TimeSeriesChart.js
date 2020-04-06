@@ -1,19 +1,12 @@
 import {Line} from 'react-chartjs-2'
 import React, {Component} from 'react';
 
-export default class TimeSeriesChart extends Component {
-
-  render() {
-    return (<Line data={this.props.data} options={options}/>);
-  }
-}
-
 const options = {
   response: true,
   title: {
     display: true,
     fontSize: 18,
-    text: "Moving Time Series!"
+    text: "Data Display"
   },
   hover: {
     mode: 'nearest',
@@ -63,3 +56,10 @@ const options = {
   }
 
 }
+export default class TimeSeriesChart extends Component {
+
+  render() {
+    return (<Line data={this.props.data} options={options}/>);
+  }
+}
+

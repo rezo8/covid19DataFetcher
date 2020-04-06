@@ -5,6 +5,7 @@ const { DataAggregator} = require('./DataAggregator')
 
 class ApiExecutor {
     constructor(apiHost, apiKey) {
+        console.log('construct')
         this.apiKey = apiKey
         this.apiHost = apiHost
     }
@@ -55,6 +56,10 @@ class ApiExecutor {
     */
     getHistoryStatsForCountryForDay(inputCountry, date, cb){
         this.genericRequest('GET', { "country" : inputCountry, "day" : date }, 'https://covid-193.p.rapidapi.com/history', function(err, response, body){ cb(new CountryDataAggregator(inputCountry, JSON.parse(body)['response'])) })
+    }
+
+    test(){
+        console.log('youd did it')
     }
 
 }

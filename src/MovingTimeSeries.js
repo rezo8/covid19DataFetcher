@@ -2,117 +2,94 @@ import React, {Component} from 'react';
 
 import TimeSeriesChart from "./TimeSeriesChart.js"
 import ValChanger from "./ValChanger.js"
+import { ApiExecutor } from "../workers/apiExecutor.js"
 import './App.css'
 
-const colors = ['rgba(0,0,204,1)', 'rgba(204,0,0,1)', 'rgba(0,204,204,1)']
+const colors = ['rgba(0,0,204,1)', 'rgba(0,204,204,1)', 'rgba(204,0,0,1)']
 
-var data = initData(60000 * 5, 10000, 1, 3);
 var rows;
 
 export default class MovingTimeSeries extends Component {
   constructor() {
     super();
-    rows = genRows(this, 1, 3);
+    this.apiExec = new ApiExecutor('covid-193.p.rapidapi.com', 'a105fbc46emsh9211cb134c839b1p1d1031jsn8f45ca70b43d' )
     this.state = {
-      nextData: generateDataRefs(1, 3),
-      data: data
+      data: [],
+      currentCountry: "USA"
     }
   }
+
+
+   updateDataChart() {
+    const currentCountry = this.state.currentCountry
+    const thisRef = this
+    this.apiExec.getHistoryStatsForCountry(currentCountry, function(data){
+        thisRef.setState({data: initializeCountryData(data)})
+        console.log(thisRef.state)
+    })
+   }
+
   componentDidMount() {
-    var method = updateCharts.bind(this);
-    setInterval(method, 10000);
+    this.updateDataChart()
   }
   render() {
     return <div className='rowC'>
       <div className="chart">
         <TimeSeriesChart ref={this.myChart} data={this.state.data}/>
       </div>
-      <div className="buttons">
-        {rows}
-      </div>
     </div>
 
   }
 }
 
-function initData(range, step, startVal, endVal) {
 
-  var end = Date.now();
-  var start = end - range;
-  var labels = [];
-  while (start <= end) {
-    var date = new Date(start);
-    labels.push(date.toTimeString().split(' ')[0])
-    start += step;
-  }
-  var toRet = {}
-  var dataSets = []
+function initializeCountryData( data){
+    // TODO figure out how to make it so that we iterate from past to present in the beginning.
+    // TODO try not to reverse ugh
+    // TODO figure out how to use the map dataformat here: https://www.chartjs.org/docs/latest/charts/line.html
+    // Think of a good way to allow multiple to display
 
-  for (var i = startVal; i <= endVal; i++) {
+    var toRet = {}
+    var xAxis = []
+    var dataSets = []
+    const infoMap = data.dataMap
+    console.log(infoMap)
+    const country = data.country
+    //var dataSets = [new Map(), new Map(), new Map()]
+    var dataSets = [[],[], []]
+    console.log(dataSets)
+    for (var key in infoMap) {
+      xAxis.push(key)
+      console.log(typeof(key))
+
+      //dataSets[0].set(key, infoMap[key].tests.total || 0 )
+      //dataSets[1].set(key, infoMap[key].cases.total || 0 )
+      //dataSets[2].set(key, infoMap[key].deaths.total || 0 )
+
+      //dataSets[0].push(infoMap[key].tests.total || 0 )
+      dataSets[1].push(infoMap[key].cases.total || 0 )
+      //dataSets[2].push(infoMap[key].deaths.total || 0 )
+
+    }
+    xAxis.reverse()
+    dataSets.forEach( x => x.reverse())
+
+    const toGraph = [prepData("Tests", colors[0], dataSets[0]), prepData("cases", colors[1], dataSets[1]),prepData("deaths", colors[2], dataSets[2]) ]
+    toRet['labels'] = xAxis;
+    toRet['datasets'] = toGraph;
+    console.log(toRet)
+    return toRet
+}
+
+
+function prepData(label, color, dataAgg){
     var toPush = {}
-    var dataToPush = new Array(labels.length).fill(i);
-
-    var color = colors[i - 1];
-    toPush['label'] = "Line #" + i;
+    toPush['label'] = label;
     toPush['backgroundColor'] = color;
     toPush['borderColor'] = color;
-    toPush['data'] = dataToPush;
+    toPush['data'] = dataAgg;
     toPush['fill'] = false;
-
-    dataSets.push(toPush);
-  }
-  toRet['labels'] = labels;
-  toRet['datasets'] = dataSets;
-  return toRet;
+    return toPush
 }
 
-function updateCharts(time) {
-  time = new Date().toTimeString().split(' ')[0];
 
-  var newData = this.state.data;
-  newData.labels = newData.labels.slice(1, newData.labels.length);
-  newData.labels.push(time);
-  var nextData = this.state.nextData;
-
-  newData.datasets.forEach(function(data) {
-
-    var trueData = data.data;
-    trueData = trueData.slice(1, trueData.length);
-    var index = newData.datasets.indexOf(data);
-    trueData.push(nextData[index + 1]);
-    data['data'] = trueData;
-  });
-
-  this.setState({data: newData})
-
-}
-
-function generateDataRefs(startVal, endVal) {
-  var toRet = {}
-  for (var i = startVal; i <= endVal; i++) {
-    toRet[i] = i;
-  }
-  return toRet;
-}
-
-function updateNextVal(index, diff) {
-  var nextData = this.state.nextData;
-  nextData[index] = nextData[index] + diff;
-  this.setState({nextData: nextData})
-}
-
-function genRows(parent, startVal, endVal) {
-  var toRet = []
-  for (var i = startVal; i <= endVal; i++) {
-    var leftName = "Line" + i + " +";
-    var rightName = "Line" + i + " -";
-    var left = <ValChanger name={leftName} handleClick={updateNextVal.bind(parent, i, 1)}/>
-    var right = <ValChanger name={rightName} handleClick={updateNextVal.bind(parent, i, -1)}/>
-
-    toRet.push(<div class="btn-group">
-      {left}
-      {right}
-    </div>);
-  }
-  return toRet;
-}
