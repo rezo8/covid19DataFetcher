@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+// import "bootstrap/dist/css/bootstrap.css";
+import "bootswatch/journal/bootstrap.css";
+import Header from "./Header.js"
+import AboutMe from "./AboutMe.js"
+import ContactMe from "./ContactMe.js"
+import IsItFlat from "./IsItFlat.js"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const CORE = {
+  "About Me": <AboutMe/>,
+  "Contact Me": <ContactMe/>,
+  "IsItFlat": <IsItFlat/>,
+}
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      activeSite: "IsItFlat"
+    }
+  }
+
+  componentWillMount() {}
+  render() {
+    const body = CORE[this.state.activeSite]
+    console.log(body);
+    return (<div className="App">
+      <div >< Header changeSelected={this.changeSelected.bind(this)}/></div>
+      <div className="textChunk">
+        {body}
+      </div>
+      <br/>
+      <br/>
+    </div>);
+
+  }
+
+  changeSelected(key) {
+    this.setState({activeSite: key})
+  }
+
 }
 
 export default App;

@@ -1,38 +1,253 @@
 .App {
   text-align: center;
+  align-items: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+.rowC{display:flex; flex-direction:row;}
+
+.chart {
+  width : 80%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.btn-group button {
+    background-color: #B2BABB; /* Silver background */
+    color: black; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+    width : 100px;
+    margin : 5px
+}
+
+.btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+    background-color: #34495E;
+}
+
+.buttons{
+  align: center;
+  margin:auto;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: blue;
+}
+
+.myMarker {
+  position:absolute;
+  background: red;
+  z-index:20
+}
+.regDisplay {
+   border:0px solid red;
+   background-color: inherit;
+   padding:10px;
+   width:360px;
+   max-width: 420px;
+   overflow:hidden;
+}
+
+
+.memDisplay {
+   border:1px solid blueqas d;
+   background-color: inherit;
+   padding:10px;
+   width:360px;
+   max-width: 420px;
+   overflow:hidden;
+}
+
+
+.left {
+  float:left;
+  width:169px;
+  max-width: 190px;
+}
+.right {
+    float:right;
+    width:180px;
+    max-width: 200px;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.navbar-custom{
+
+    background-color: black;
+    border-color: black;
+}
+
+.header {
+  background-color: #9F9F9F;
+  height: 150px;
+  padding: 20px;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.App-intro {
+  font-size: large;
 }
 
+
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.parent {
+  border : 5px solid lightcoral;
+}
+
+
+
+.register {
+  border:2px solid black;
+  padding:10px;
+  width: 150px;
+  background-color: #9F9F9F;
+  border-radius: 25px;
+  word-wrap: break-word;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: #FFFFFF;
+}
+
+.papaBear{
+  background-color: white;
+}
+
+.navbar {
+    color: #FFFFFF;
+    background-color: #FFFFFF;
+}
+
+
+.instruction {
+  border:2px solid black;
+  padding:10px;
+  width: 150px;
+  background-color: #9F9F9F;
+  border-radius: 25px;
+  word-wrap: break-word;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: #FFFFFF;
+}
+
+.addr {
+  border:1px solid black;
+  padding:5px;
+  width: 75px;
+  background-color: #FFFFFF;
+  word-wrap: break-word;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: #9F9F9F;
+}
+
+.value {
+  border:1px solid black;
+  padding:5px;
+  width: 75px;
+  background-color: #FFFFFF;
+  word-wrap: break-word;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: #9F9F9F;
+}
+
+
+
+
+/***                Flex Stuf       ***/
+
+.parent {display: flex}
+
+.App-intro {
+  font-size: large;
+}
+
+
+.AboutMe{
+  width: 80%;
+  align-items: center;
+
+}
+
+.Body {
+
+  width : 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.fillerWidth {
+  width : "450px";
+}
+.Center {
+
+    display: flex;
+    justify-content: center;
+}
+
+.Form{
+  width : 80%;
+  justify-content: center;
+}
+
+.List {
+    width : 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.discList{
+  list-style-type:square;
+}
+.textChunk{
+    align-content : center;
+    text-align: left;
+   padding-right: 15%;
+   padding-left: 15%;
+}
+
+
+.container {
+  width : 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
