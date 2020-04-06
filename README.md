@@ -5,7 +5,7 @@ First of all, thank you very much to the api that made this project possible. Th
 Much luv fambam.
 
 Second of all, I'm going to eveeentually tie this up to a website based on React.
-Until then, if you want to play around with the data, just do the following in the directory with the app.js file.
+Until then, if you want to play around with the data, feel free to change the app.js file as you wish and run the following in the directory with the app.js file.
 
 
 <pre><code> node app.js
