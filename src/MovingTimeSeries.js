@@ -20,7 +20,8 @@ export default class MovingTimeSeries extends Component {
     this.state = {
       data: [],
       currentCountry: "USA",
-      toDisplay : "Cases"
+      toDisplay : "Cases",
+      graphTitle : "DataDisplay"
     }
   }
 
@@ -28,14 +29,13 @@ export default class MovingTimeSeries extends Component {
    updateDataChart() {
     const currentCountry = this.state.currentCountry
     const thisRef = this
+    // TODO add loading screen as this works.
     this.apiExec.getHistoryStatsForCountry(currentCountry, function(data){
-        const values = initializeCountryData(data)
+        const values = initializeCountryData(data, thisRef.state.currentCountry)
         var toGraph = {}
         toGraph['labels'] = values[0];
         toGraph['datasets'] = [values[1][thisRef.state.toDisplay]];
-        console.log(toGraph)
         thisRef.setState({data: toGraph })
-        console.log(thisRef.state)
     })
    }
 
@@ -44,11 +44,16 @@ export default class MovingTimeSeries extends Component {
   }
 
   updateDisplay(toShow){
-    console.log(toShow)
     if(displays.includes(toShow)){
         this.setState({toDisplay : toShow})
         this.updateDataChart()
     }
+  }
+
+  updateCountry(country){
+    //TODO add does country exist validation
+    this.setState({currentCountry: country})
+    this.updateDataChart()
   }
 
   render() {
@@ -62,7 +67,7 @@ export default class MovingTimeSeries extends Component {
 
          <div id="ControlConsole">
                  <Center>
-                   <ControlConsole updateDisplay={this.updateDisplay.bind(this)} />
+                   <ControlConsole updateDisplay={this.updateDisplay.bind(this)} updateCountry={this.updateCountry.bind(this)} apiRef = {this.apiExec} />
                  </Center>
                </div>
          </div>
@@ -71,26 +76,16 @@ export default class MovingTimeSeries extends Component {
 }
 
 
-function initializeCountryData( data){
-    // TODO figure out how to make it so that we iterate from past to present in the beginning.
-    // TODO try not to reverse ugh
-    // TODO figure out how to use the map dataformat here: https://www.chartjs.org/docs/latest/charts/line.html
-    // Think of a good way to allow multiple to display
-
+function initializeCountryData(data, title){
     var toRet = {}
     var xAxis = []
     var dataSets = []
     const infoMap = data.dataMap
-    console.log(infoMap)
     const country = data.country
     //var dataSets = [new Map(), new Map(), new Map()]
     var dataSets = [[],[], []]
-    console.log(dataSets)
     for (var key in infoMap) {
       xAxis.push(key)
-      console.log(typeof(key))
-
-
       dataSets[0].push(infoMap[key].tests.total || 0 )
       dataSets[1].push(infoMap[key].cases.total || 0 )
       dataSets[2].push(infoMap[key].deaths.total || 0 )
@@ -100,16 +95,16 @@ function initializeCountryData( data){
     dataSets.forEach( x => x.reverse())
 
     const toGraph = {}
-    toGraph[displays[0]] = prepData( displays[0] , colors[0], dataSets[0])
-    toGraph[displays[1]] = prepData( displays[1] , colors[1], dataSets[1])
-    toGraph[displays[2]] = prepData( displays[2] , colors[2], dataSets[2])
+    toGraph[displays[0]] = prepData( displays[0] , colors[0], dataSets[0], title)
+    toGraph[displays[1]] = prepData( displays[1] , colors[1], dataSets[1], title)
+    toGraph[displays[2]] = prepData( displays[2] , colors[2], dataSets[2], title)
     return [xAxis, toGraph]
 }
 
 
-function prepData(label, color, dataAgg){
+function prepData(label, color, dataAgg, currentCountry){
     var toPush = {}
-    toPush['label'] = label;
+    toPush['label'] = label + ' in ' + currentCountry;
     toPush['backgroundColor'] = color;
     toPush['borderColor'] = color;
     toPush['data'] = dataAgg;

@@ -2,6 +2,7 @@ import React from "react";
 import './App.css';
 import {ButtonToolbar, Grid, Row, Button} from "react-bootstrap";
 import Center from 'react-center';
+import CountrySelector from "./CountrySelector.js"
 
 
 export default class ControlConsole extends React.Component {
@@ -23,9 +24,6 @@ export default class ControlConsole extends React.Component {
 
   onStep() {}
 
-  test(){
-    console.log('woww')
-  }
   handleClick(param) {
     console.log(param)
   }
@@ -42,6 +40,9 @@ export default class ControlConsole extends React.Component {
     this.props.updateDisplay("Cases")
   }
 
+  updateCountry(country){
+    this.props.updateCountry(country)
+  }
 
   render() {
     return (
@@ -56,14 +57,16 @@ export default class ControlConsole extends React.Component {
                       {/* Indicates caution should be taken with this action */}
                       <Button bsStyle="warning" onClick={this.toggleCasesVisualization.bind(this)}>Cases</Button>
 
-                      {/* Indicates a dangerous or potentially negative action */}
+                      {/* Indic ates a dangerous or potentially negative action */}
                       <Button bsStyle="danger" onClick={this.toggleDeathVisualization.bind(this)}>Deaths</Button>
 
                     </ButtonToolbar>
+                    <div>
+                                <CountrySelector apiRef={this.props.apiRef} updateCountry = {this.updateCountry.bind(this)}> </CountrySelector>
+                            </div>
                </Center>
          </Row>
       </Grid>
-
     </div>)
   }
 }

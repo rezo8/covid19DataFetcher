@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import {FormControl, Dropdown, MenuItem} from 'react-bootstrap'
 class CustomToggle extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -10,7 +10,6 @@ class CustomToggle extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-
     this.props.onClick(e);
   }
 
@@ -23,7 +22,7 @@ class CustomToggle extends React.Component {
   }
 }
 
-class CountrySelector extends React.Component {
+class CustomMenu extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -49,6 +48,7 @@ class CountrySelector extends React.Component {
   render() {
     const { children } = this.props;
     const { value } = this.state;
+    //TODO figure out how to make filtering not type sensitive
 
     return (
       <div className="dropdown-menu" style={{ padding: '' }}>
@@ -71,17 +71,37 @@ class CountrySelector extends React.Component {
   }
 }
 
-render(
-  <Dropdown id="dropdown-custom-menu">
-    <CustomToggle bsRole="toggle">Custom toggle</CustomToggle>
+export default class CountrySelector extends React.Component {
 
-    <CustomMenu bsRole="menu">
-      <MenuItem eventKey="1">Red</MenuItem>
-      <MenuItem eventKey="2">Blue</MenuItem>
-      <MenuItem eventKey="3" active>
-        Orange
-      </MenuItem>
-      <MenuItem eventKey="1">Red-Orange</MenuItem>
-    </CustomMenu>
-  </Dropdown>
-);
+    constructor(props, context) {
+        super(props);
+        this.state = {
+            countryList: ["USA"]
+        }
+
+    }
+    componentDidMount(){
+        const thisRef = this
+        this.props.apiRef.getCountries(function(body){
+            console.log('there are ' + body.results + ' countries available to look at')
+            thisRef.setState({countryList : body.response})
+        })
+    }
+
+    render(){
+        const thisRef = this
+        let countries = this.state.countryList.map((val, index)  => (
+            <MenuItem eventKey={index} onClick={e => thisRef.props.updateCountry(val)} value={val}>{val}</MenuItem>
+        ))
+        return (
+          <Dropdown id="dropdown-custom-menu">
+            <CustomToggle bsRole="toggle">Select Country</CustomToggle>
+
+            <CustomMenu bsRole="menu">
+              {countries}
+            </CustomMenu>
+          </Dropdown>
+          )
+    }
+
+}
