@@ -4,8 +4,11 @@ import TimeSeriesChart from "./TimeSeriesChart.js"
 import ValChanger from "./ValChanger.js"
 import { ApiExecutor } from "../workers/apiExecutor.js"
 import './App.css'
+import {ButtonToolbar, Grid, Row, Button} from "react-bootstrap";
+import Center from 'react-center';
+import ControlConsole from './ControlConsole.js'
 
-const colors = ['rgba(0,0,204,1)', 'rgba(0,204,204,1)', 'rgba(204,0,0,1)']
+const colors = ['rgba(36, 178, 77, 1)', 'rgba(245, 231, 39, 1)', 'rgba(245, 122, 0, 1)']
 const displays = ["Tests", "Cases", "Deaths"]
 
 var rows;
@@ -40,13 +43,30 @@ export default class MovingTimeSeries extends Component {
     this.updateDataChart()
   }
 
-  render() {
-    return <div className='rowC'>
-      <div className="chart">
-        <TimeSeriesChart ref={this.myChart} data={this.state.data} options = {casesOptions}/>
-      </div>
-    </div>
+  updateDisplay(toShow){
+    console.log(toShow)
+    if(displays.includes(toShow)){
+        this.setState({toDisplay : toShow})
+        this.updateDataChart()
+    }
+  }
 
+  render() {
+    return <div>
+        <div className='rowC'>
+            <div className="chart">
+                 <TimeSeriesChart ref={this.myChart} data={this.state.data} options = {casesOptions}/>
+            </div>
+        </div>
+        <div className='displaySelector'>
+
+         <div id="ControlConsole">
+                 <Center>
+                   <ControlConsole updateDisplay={this.updateDisplay.bind(this)} />
+                 </Center>
+               </div>
+         </div>
+     </div>
   }
 }
 
