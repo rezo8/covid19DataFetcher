@@ -6,6 +6,7 @@ import { ApiExecutor } from "../workers/apiExecutor.js"
 import './App.css'
 
 const colors = ['rgba(0,0,204,1)', 'rgba(0,204,204,1)', 'rgba(204,0,0,1)']
+const displays = ["Tests", "Cases", "Deaths"]
 
 var rows;
 
@@ -15,7 +16,8 @@ export default class MovingTimeSeries extends Component {
     this.apiExec = new ApiExecutor('covid-193.p.rapidapi.com', 'a105fbc46emsh9211cb134c839b1p1d1031jsn8f45ca70b43d' )
     this.state = {
       data: [],
-      currentCountry: "USA"
+      currentCountry: "USA",
+      toDisplay : "Cases"
     }
   }
 
@@ -24,7 +26,12 @@ export default class MovingTimeSeries extends Component {
     const currentCountry = this.state.currentCountry
     const thisRef = this
     this.apiExec.getHistoryStatsForCountry(currentCountry, function(data){
-        thisRef.setState({data: initializeCountryData(data)})
+        const values = initializeCountryData(data)
+        var toGraph = {}
+        toGraph['labels'] = values[0];
+        toGraph['datasets'] = [values[1][thisRef.state.toDisplay]];
+        console.log(toGraph)
+        thisRef.setState({data: toGraph })
         console.log(thisRef.state)
     })
    }
@@ -32,10 +39,11 @@ export default class MovingTimeSeries extends Component {
   componentDidMount() {
     this.updateDataChart()
   }
+
   render() {
     return <div className='rowC'>
       <div className="chart">
-        <TimeSeriesChart ref={this.myChart} data={this.state.data}/>
+        <TimeSeriesChart ref={this.myChart} data={this.state.data} options = {casesOptions}/>
       </div>
     </div>
 
@@ -62,23 +70,20 @@ function initializeCountryData( data){
       xAxis.push(key)
       console.log(typeof(key))
 
-      //dataSets[0].set(key, infoMap[key].tests.total || 0 )
-      //dataSets[1].set(key, infoMap[key].cases.total || 0 )
-      //dataSets[2].set(key, infoMap[key].deaths.total || 0 )
 
-      //dataSets[0].push(infoMap[key].tests.total || 0 )
+      dataSets[0].push(infoMap[key].tests.total || 0 )
       dataSets[1].push(infoMap[key].cases.total || 0 )
-      //dataSets[2].push(infoMap[key].deaths.total || 0 )
+      dataSets[2].push(infoMap[key].deaths.total || 0 )
 
     }
     xAxis.reverse()
     dataSets.forEach( x => x.reverse())
 
-    const toGraph = [prepData("Tests", colors[0], dataSets[0]), prepData("cases", colors[1], dataSets[1]),prepData("deaths", colors[2], dataSets[2]) ]
-    toRet['labels'] = xAxis;
-    toRet['datasets'] = toGraph;
-    console.log(toRet)
-    return toRet
+    const toGraph = {}
+    toGraph[displays[0]] = prepData( displays[0] , colors[0], dataSets[0])
+    toGraph[displays[1]] = prepData( displays[1] , colors[1], dataSets[1])
+    toGraph[displays[2]] = prepData( displays[2] , colors[2], dataSets[2])
+    return [xAxis, toGraph]
 }
 
 
@@ -93,3 +98,170 @@ function prepData(label, color, dataAgg){
 }
 
 
+const casesOptions = {
+  response: true,
+  title: {
+    display: true,
+    fontSize: 18,
+    text: "Data Display"
+  },
+  hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  elements: {
+    line: {
+      tension: 0
+    }
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false
+        },
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Time'
+        }
+      }
+    ],
+    yAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false
+        },
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Cases'
+        },
+        ticks: {
+          suggestedMin: -2,
+          suggestedMax: 5
+        }
+      }
+    ]
+  },
+  legend: {
+    display: true
+  },
+  tooltips: {
+    mode: 'index',
+    intersect: false
+  }
+
+}
+
+const deathsOptions = {
+  response: true,
+  title: {
+    display: true,
+    fontSize: 18,
+    text: "Data Display"
+  },
+  hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  elements: {
+    line: {
+      tension: 0
+    }
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false
+        },
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Time'
+        }
+      }
+    ],
+    yAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false
+        },
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Deaths'
+        },
+        ticks: {
+          suggestedMin: -2,
+          suggestedMax: 5
+        }
+      }
+    ]
+  },
+  legend: {
+    display: true
+  },
+  tooltips: {
+    mode: 'index',
+    intersect: false
+  }
+
+}
+
+const testsOptions = {
+  response: true,
+  title: {
+    display: true,
+    fontSize: 18,
+    text: "Data Display"
+  },
+  hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  elements: {
+    line: {
+      tension: 0
+    }
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false
+        },
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Time'
+        }
+      }
+    ],
+    yAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false
+        },
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Tests'
+        },
+        ticks: {
+          suggestedMin: -2,
+          suggestedMax: 5
+        }
+      }
+    ]
+  },
+  legend: {
+    display: true
+  },
+  tooltips: {
+    mode: 'index',
+    intersect: false
+  }
+
+}
