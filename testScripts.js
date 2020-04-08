@@ -1,7 +1,8 @@
 const { ApiExecutor } = require('./workers/apiExecutor')
+const { CurveModeler } = require('./workers/curveModeler')
 const { CountryDataAggregator} = require('./workers/CountryDataAggregator')
 const apiExecutor = new ApiExecutor('covid-193.p.rapidapi.com', 'a105fbc46emsh9211cb134c839b1p1d1031jsn8f45ca70b43d' )
-
+const curveModeler = new CurveModeler(apiExecutor)
 /*
 apiExecutor.getCountries(function(body){ console.log('there are ' + body.results + ' countries available to look at') })
 
@@ -22,12 +23,14 @@ apiExecutor.getHistoryStatsForCountryForDay("Trinidad-and-Tobago", "2020-04-05",
 })
 
 
-*/
+
 apiExecutor.getStatsForToday(function(data){
     console.log(data.currentDeathsCategoryForCountry("S.-Korea"))
     console.log(data.getTopNCountriesForCategory(10, 'deaths'))
     console.log(data.getTopNCountriesForCategory(10, 'tests'))
     console.log(data.getTopNCountriesForCategory(10, 'cases'))
 })
+*/
 
+curveModeler.generateInfoGraph(10)
 
