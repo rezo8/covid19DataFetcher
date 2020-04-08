@@ -25,11 +25,10 @@ class CurveModeler {
 
         let k = Math.min(susceptibleArray.length, infectedArray.length)
 
-
-        let curr = 1
+        let curr = 0
         let summation = 0
         while(curr < k - 1){
-            summation += ((susceptibleArray[curr] - susceptibleArray[curr- 1])/(susceptibleArray[curr] * infectedArray[curr]))
+            summation += ((susceptibleArray[curr] - susceptibleArray[curr + 1])/(susceptibleArray[curr] * infectedArray[curr]))
             curr++
         }
 
@@ -42,10 +41,10 @@ class CurveModeler {
 
         let k = Math.min(recoveryArray.length, infectedArray.length)
 
-        let curr = 1
+        let curr = 0
         let avgRate = 0
         while(curr < k - 1){
-            let rDelta = recoveryArray[curr]  - recoveryArray[curr - 1]
+            let rDelta = recoveryArray[curr]  - recoveryArray[curr + 1]
             let currRate = rDelta/(infectedArray[curr])
             avgRate = avgRate + currRate
             curr ++
