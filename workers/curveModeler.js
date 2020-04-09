@@ -5,33 +5,35 @@ let populations = JSON.parse(fs.readFileSync('./public/populations.json'));
 
 class CurveModeler {
 
-    constructor(country, susceptibleArray, infectedArray, recoveryArray){
-        this.rateOfRecovery = 0.23
-        this.rateOfTransmission = 2.0
-        console.log(populations[country])
-        this.computeConstantsWithData(susceptibleArray, infectedArray, recoveryArray)
-        this.sStart = .99
-        this.iStart = .01
-        this.rStart = 0
+    /*
+        Assumes that t
+    */
+    constructor(country, sirModelData){
+
+        const res  = this.parseSIRModelData(sirModelData)
+        this.computeConstantsWithData(res[0], res[1], res[2])
+        this.sStart = res[3]
+        this.iStart = res[4]
+        this.rStart = res[5]
     }
 
     computeConstantsWithData(susceptibleArray, infectedArray, recoveryArray){
-        this.rateOfTransmission = this.computeRateOfTransmissionWithData(susceptibleArray, infectedArray)
-        this.rateOfRecovery = this.computeRateOfRecoveryWithData(susceptibleArray, infectedArray)
-
-
+        this.rateOfTransmission = this.computeRateOfTransmissionWithData(susceptibleArray, infectedArray) || 2.0
+        this.rateOfRecovery = this.computeRateOfRecoveryWithData(susceptibleArray, infectedArray) || 0.23
 
     }
 
     computeRateOfTransmissionWithData(susceptibleArray, infectedArray){
 
         let k = Math.min(susceptibleArray.length, infectedArray.length)
-
+        console.log(k)
         let curr = 0
         let summation = 0
         while(curr < k - 1){
             summation += ((susceptibleArray[curr] - susceptibleArray[curr + 1])/(susceptibleArray[curr] * infectedArray[curr]))
+            console.log(summation)
             curr++
+
         }
 
         return summation/k
@@ -75,6 +77,26 @@ class CurveModeler {
             start ++
         }
         return infoGraph
+    }
+
+     parseSIRModelData(sirModelData){
+        sirModelData.sort(function(a,b) {
+            return Date.parse(a['date']) - Date.parse(b['date'])
+        })
+
+        var sList = []
+        var iList = []
+        var rList = []
+
+        for (const index in sirModelData){
+            const entry = sirModelData[index]
+            sList.push(entry['susceptible'])
+            iList.push(entry['infected'])
+            rList.push(entry['recovered'])
+
+        }
+        console.log(sList)
+        return [sList, iList, rList, sList[0], iList[0], rList[0]]
     }
 
     performInfoComputation(Sk, Ik, Rk){
