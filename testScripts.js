@@ -3,8 +3,7 @@ const { CurveModeler } = require('./workers/curveModeler')
 const { CountryDataAggregator} = require('./workers/CountryDataAggregator')
 const apiExecutor = new ApiExecutor('covid-193.p.rapidapi.com', 'a105fbc46emsh9211cb134c839b1p1d1031jsn8f45ca70b43d' )
 
-
-const curveModeler = new CurveModeler([
+const curveModeler = new CurveModeler("USA",[
                                           0.99,
                                           0.9702,
                                           0.916839,
@@ -72,8 +71,7 @@ apiExecutor.getStatsForToday(function(data){
     console.log(data.getTopNCountriesForCategory(10, 'cases'))
 })
 */
-
 console.log(curveModeler.rateOfRecovery)
 console.log(curveModeler.rateOfTransmission)
-console.log(curveModeler.generateInfoGraph(10))
+curveModeler.generateInfoGraph(60)
 
