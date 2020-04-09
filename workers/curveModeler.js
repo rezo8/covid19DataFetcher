@@ -1,16 +1,18 @@
 
+const fs = require('fs');
+
+let populations = JSON.parse(fs.readFileSync('./public/populations.json'));
 
 class CurveModeler {
 
-    constructor(susceptibleArray, infectedArray, recoveryArray){
+    constructor(country, susceptibleArray, infectedArray, recoveryArray){
         this.rateOfRecovery = 0.23
         this.rateOfTransmission = 2.0
-
+        console.log(populations[country])
         this.computeConstantsWithData(susceptibleArray, infectedArray, recoveryArray)
         this.sStart = .99
         this.iStart = .01
         this.rStart = 0
-        this.maxTime = 40 // number of days we compute this for.
     }
 
     computeConstantsWithData(susceptibleArray, infectedArray, recoveryArray){
