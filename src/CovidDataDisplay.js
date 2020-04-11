@@ -14,7 +14,7 @@ import {Line} from 'react-chartjs-2'
 
 var rows;
 
-export default class MovingTimeSeries extends Component {
+export default class CovidDataDisplay extends Component {
   constructor() {
     super();
     this.apiExec = new ApiExecutor('covid-193.p.rapidapi.com', 'a105fbc46emsh9211cb134c839b1p1d1031jsn8f45ca70b43d' )
@@ -46,15 +46,18 @@ export default class MovingTimeSeries extends Component {
 
   updateDisplay(toShow){
     if(displays.includes(toShow)){
-        this.setState({toDisplay : toShow})
-        this.updateDataChart()
+        this.setState({toDisplay : toShow}, () => {
+            this.updateDataChart()
+        })
+
     }
   }
 
   updateCountry(country){
     //TODO add does country exist validation
-    this.setState({currentCountry: country})
-    this.updateDataChart()
+    this.setState({currentCountry: country}, () => {
+        this.updateDataChart()
+    })
   }
 
   render() {
