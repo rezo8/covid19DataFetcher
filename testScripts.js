@@ -9,7 +9,7 @@ apiExecutor.getHistoryStatsForCountry("Italy", function(data){
     //data.organize()
     curveModeler = data.generateCurveModeler()
     console.log(curveModeler)
-    console.log(curveModeler.generateInfoGraph(60))
+    console.log(curveModeler.generatePopulationPredictionGraph(60))
  })
 /*
 apiExecutor.getCountries(function(body){ console.log('there are ' + body.results + ' countries available to look at') })

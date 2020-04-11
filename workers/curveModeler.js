@@ -12,6 +12,7 @@ class CurveModeler {
 
         const res  = this.parseSIRModelData(sirModelData)
         this.computeConstantsWithData(res[0], res[1], res[2])
+        this.population = populations[country]
         this.sStart = res[3]
         this.iStart = res[4]
         this.rStart = res[5]
@@ -56,6 +57,14 @@ class CurveModeler {
     }
 
 
+    generatePopulationPredictionGraph(n){
+        let proportionData = this.generateInfoGraph(n)
+        let toRet = {}
+        toRet['susceptible'] = proportionData['susceptible'].map(x => x * this.population)
+        toRet['infected'] = proportionData['infected'].map(x => x * this.population)
+        toRet['recovered'] = proportionData['recovered'].map(x => x * this.population)
+        return toRet
+    }
     generateInfoGraph(n){
 
         var start = 0
