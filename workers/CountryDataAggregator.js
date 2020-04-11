@@ -1,7 +1,6 @@
 const { IndividualData } = require('./individualData')
 const { moment } = require("moment")
-const fs = require('fs');
-let populations = JSON.parse(fs.readFileSync('./public/populations.json'));
+const populations = require('../public/populations.json');
 const { CurveModeler } = require('./curveModeler')
 class CountryDataAggregator {
 
@@ -13,7 +12,7 @@ class CountryDataAggregator {
     }
 
     generateCurveModeler(){
-        return new CurveModeler(this.country, this.getDataMapForSIRModeler())
+        return new CurveModeler(this.country, populations[this.country], this.getDataMapForSIRModeler())
     }
 
     getDataMapForSIRModeler(){

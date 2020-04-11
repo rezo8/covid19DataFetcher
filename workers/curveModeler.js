@@ -1,18 +1,18 @@
 
 const fs = require('fs');
 
-let populations = JSON.parse(fs.readFileSync('./public/populations.json'));
+const populations = require('../public/populations.json');
 
 class CurveModeler {
 
     /*
         Assumes that t
     */
-    constructor(country, sirModelData){
+    constructor(country, population, sirModelData){
 
         const res  = this.parseSIRModelData(sirModelData)
         this.computeConstantsWithData(res[0], res[1], res[2])
-        this.population = populations[country]
+        this.population = population
         this.sStart = res[3]
         this.iStart = res[4]
         this.rStart = res[5]

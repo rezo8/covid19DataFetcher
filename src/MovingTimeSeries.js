@@ -10,6 +10,7 @@ import ControlConsole from './ControlConsole.js'
 
 const colors = ['rgba(36, 178, 77, 1)', 'rgba(245, 231, 39, 1)', 'rgba(245, 122, 0, 1)']
 const displays = ["Tests", "Cases", "Deaths"]
+import {Line} from 'react-chartjs-2'
 
 var rows;
 

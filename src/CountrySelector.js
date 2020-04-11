@@ -83,7 +83,6 @@ export default class CountrySelector extends React.Component {
     componentDidMount(){
         const thisRef = this
         this.props.apiRef.getCountries(function(body){
-            console.log('there are ' + body.results + ' countries available to look at')
             thisRef.setState({countryList : body.response})
         })
     }
