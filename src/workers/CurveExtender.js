@@ -1,8 +1,6 @@
 
 const fs = require('fs');
 
-const populations = require('../public/populations.json');
-
 /**
     This class takes in actual population data and will build a curve on top of that.
     Can take in fixed values or calculate the values, depending on parameters in the constructor.
@@ -12,12 +10,11 @@ class CurveExtender {
     /*
         Assumes that t
     */
-    constructor(country, susceptibleArray, infectedArray, recoveryArray, customRateOfTransmission, customRateOfRecovery ){
-        this.country = country
+    constructor(population, susceptibleArray, infectedArray, recoveryArray, customRateOfTransmission, customRateOfRecovery ){
         this.susceptibleArray = susceptibleArray
         this.infectedArray = infectedArray
         this.recoveryArray = recoveryArray
-        this.population = populations[country] // It is paramount that this is populated
+        this.population = population // It is paramount that this is populated
         if(!customRateOfTransmission && !customRateOfRecovery){
             computeConstantsWithData()
         }else{

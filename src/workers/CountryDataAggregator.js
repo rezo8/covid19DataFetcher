@@ -15,7 +15,9 @@ class CountryDataAggregator {
         return new CurveModeler(this.country, populations[this.country], this.getDataMapForSIRModeler())
     }
 
-    generatCurveExtneder
+    generatCurveExtender(){
+        return new CurveModeler(populations[this.country], this.getDataMapForSIRExtender())
+    }
 
     getDataMapForSIRModeler(){
       let sirList = []
@@ -26,6 +28,22 @@ class CountryDataAggregator {
             toAdd['recovered'] = (this.totalCategoryByDay(date, 'deaths') +  this.getRecoveredCasesByDay(date)) / this.population
             toAdd['infected'] = (this.totalCategoryByDay(date, 'cases')) / this.population
             toAdd['susceptible'] = (this.population - toAdd['infected'] - toAdd['recovered']) / this.population
+            sirList.push(toAdd)
+
+        }
+      }
+      return sirList
+    }
+
+    getDataMapForSIRExtender(){
+      let sirList = []
+      for (const date in this.dataMap){
+        if(date){ // check that date is not undefined
+            let toAdd = {}
+            toAdd['date'] = date
+            toAdd['recovered'] = (this.totalCategoryByDay(date, 'deaths') +  this.getRecoveredCasesByDay(date))
+            toAdd['infected'] = (this.totalCategoryByDay(date, 'cases'))
+            toAdd['susceptible'] = (this.population - toAdd['infected'] - toAdd['recovered'])
             sirList.push(toAdd)
 
         }
