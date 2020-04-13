@@ -20,7 +20,7 @@ class CurveModeler {
 
     computeConstantsWithData(susceptibleArray, infectedArray, recoveryArray){
         this.rateOfTransmission = this.computeRateOfTransmissionWithData(susceptibleArray, infectedArray) || 2.0
-        this.rateOfRecovery = this.computeRateOfRecoveryWithData(susceptibleArray, infectedArray) || 0.23
+        this.rateOfRecovery = this.computeRateOfRecoveryWithData(recoveryArray, infectedArray) || 0.23
 
     }
 
