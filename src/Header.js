@@ -11,7 +11,7 @@ class Header extends Component {
   render() {
     return (<Navbar>
       <Nav className="navbar navbar-dark bg-dark" onSelect={this.handleSelect.bind(this)}>
-        <NavItem eventKey={"Is it Flat?"} href="#">
+        <NavItem eventKey={"IsItFlat"} href="#">
                   Is it Flat?
         </NavItem>
         <NavItem eventKey={"About Me"}>
@@ -25,6 +25,6 @@ class Header extends Component {
       </Nav>
     </Navbar>)
       }
-        }
+    }
 
 export default Header

@@ -15,6 +15,8 @@ class CountryDataAggregator {
         return new CurveModeler(this.country, populations[this.country], this.getDataMapForSIRModeler())
     }
 
+    generatCurveExtneder
+
     getDataMapForSIRModeler(){
       let sirList = []
       for (const date in this.dataMap){

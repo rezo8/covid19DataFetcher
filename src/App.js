@@ -26,7 +26,9 @@ class App extends Component {
     const body = CORE[this.state.activeSite]
     console.log(body);
     return (<div className="App">
-      <div >< Header changeSelected={this.changeSelected.bind(this)}/></div>
+      <div>
+        < Header changeSelected={this.changeSelected.bind(this)}/>
+      </div>
       <div className="textChunk">
         {body}
       </div>

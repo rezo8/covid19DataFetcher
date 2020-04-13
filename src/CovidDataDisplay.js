@@ -7,6 +7,7 @@ import './App.css'
 import {ButtonToolbar, Grid, Row, Button} from "react-bootstrap";
 import Center from 'react-center';
 import ControlConsole from './ControlConsole.js'
+import SimulationConsole from './SimulationConsole.js'
 import { casesOptions, testsOptions, deathsOptions} from './utils/graphOptions.js'
 
 const colors = ['rgba(36, 178, 77, 1)', 'rgba(245, 231, 39, 1)', 'rgba(245, 122, 0, 1)']
@@ -23,7 +24,8 @@ export default class CovidDataDisplay extends Component {
       data: [],
       currentCountry: "USA",
       toDisplay : "Cases",
-      graphTitle : "DataDisplay"
+      graphTitle : "DataDisplay",
+      showPrediction: false
     }
   }
 
@@ -31,7 +33,7 @@ export default class CovidDataDisplay extends Component {
    updateDataChart() {
     const currentCountry = this.state.currentCountry
     const thisRef = this
-    // TODO add loading screen as this works.
+
     this.apiExec.getHistoryStatsForCountry(currentCountry, function(data){
         const values = initializeCountryData(data, thisRef.state.currentCountry)
         var toGraph = {}
@@ -63,19 +65,19 @@ export default class CovidDataDisplay extends Component {
 
   render() {
     return <div>
-        <div className='rowC'>
-            <div className="chart">
-                 <TimeSeriesChart ref={this.myChart} data={this.state.data} options = {casesOptions}/>
-            </div>
+        <div className="chart">
+             <TimeSeriesChart ref={this.myChart} data={this.state.data} options = {casesOptions}/>
         </div>
-        <div className='displaySelector'>
-
-         <div id="ControlConsole">
-                 <Center>
-                   <ControlConsole updateDisplay={this.updateDisplay.bind(this)} updateCountry={this.updateCountry.bind(this)} apiRef = {this.apiExec} />
-                 </Center>
-               </div>
-         </div>
+        <br/>
+        <br/>
+        <div id="ControlConsole">
+           <ControlConsole updateDisplay={this.updateDisplay.bind(this)} updateCountry={this.updateCountry.bind(this)} apiRef = {this.apiExec} />
+        </div>
+        <br/>
+        <br/>
+        <div id="container">
+           <SimulationConsole updateDisplay={this.updateDisplay.bind(this)} updateCountry={this.updateCountry.bind(this)} apiRef = {this.apiExec} />
+        </div>
      </div>
   }
 }
