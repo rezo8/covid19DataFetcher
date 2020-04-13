@@ -1,6 +1,6 @@
-const { ApiExecutor } = require('./workers/apiExecutor')
-const { CurveModeler } = require('./workers/curveModeler')
-const { CountryDataAggregator} = require('./workers/CountryDataAggregator')
+const { ApiExecutor } = require('./src/workers/apiExecutor')
+const { CurveModeler } = require('./src/workers/curveModeler')
+const { CountryDataAggregator} = require('./src/workers/CountryDataAggregator')
 const apiExecutor = new ApiExecutor('covid-193.p.rapidapi.com', 'a105fbc46emsh9211cb134c839b1p1d1031jsn8f45ca70b43d' )
 
 let curveModeler
